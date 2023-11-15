@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index3.css">
+
+	<!-- Load plotly.js into the DOM -->
+	<script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+
+    <script src="./index3.js"></script>
+</head>
+<body>
+    <div id="pcp">
+        <!-- <h1>My plot</h1> -->
+        <div id="title">
+            <h1>Parallel Coordinate Plot (PCP)</h1>
+            <h2>Fuel Consumption Information</h2>
+            <ol>
+                <h4># Dimensions of Parallel Coordinate Plot :</h4>
+                <li>Year</li>
+                <li>CNG</li>
+                <li>Biodiesel</li>
+                <li>E85</li>
+                <li>LNG</li>
+                <li>Propane</li>
+                <li>Electric</li>
+                <li>RNG</li>
+                <li>Hydrogen</li>
+            </ol>
+            <a href="index.html">Go back to Home Page</a>
+        </div>
+        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>Treemap Chart</title>
+  <link href="https://playground.anychart.com/Up2BCFGq/iframe" rel="canonical">
+  <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
+  <meta content="Tooltip,Treemap Chart" name="keywords">
+  <meta content="AnyChart - JavaScript Charts designed to be embedded and integrated" name="description">
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+  <style>
+    html,
+    body,
+    #map {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .button {
+      background-color: rebeccapurple;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 13px 28px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+
+    .button1 {
+      background-color: white;
+      color: black;
+      border: 2px solid rebeccapurple;
+    }
+
+    .button1:hover {
+      background-color: rebeccapurple;
+      color: white;
+    }
+
+    /* file upload button */
+    input[type="file"]::file-selector-button {
+      border-radius: 4px;
+      padding: 10px 16px;
+      height: 40px;
+      cursor: pointer;
+      background-color: white;
+      border: 1px solid rgba(0, 0, 0, 0.16);
+      box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+      margin-right: 16px;
+      margin-left: 16px;
+      transition: background-color 200ms;
+    }
+
+    /* file upload button hover state */
+    input[type="file"]::file-selector-button:hover {
+      background-color: #f3f4f6;
+    }
+
+    /* file upload button active state */
+    input[type="file"]::file-selector-button:active {
+      background-color: #e5e7eb;
+    }
+  </style>
+</head>
+
+<body>
+
+  <input type="file" id="csvFileInput" accept=".csv">
+  <button class="button button1" id="convertButton">Load TreeMap</button>
+  <button class="button button1" onclick="window.location.reload();">Clear</button>
+  <!-- <pre id="output"></pre> -->
+  <div id="container"></div>
+  <div id="map"></div>
+  <!-- button for clearing the page -->
+
+
+  <script src="js/anychart-core.min.js"></script>
+  <script src="js/anychart-treemap.min.js"></script>
+  <script type="text/javascript">anychart.onDocumentReady(function () {
+
+      // create data
+
+
+      var data = [];
+      let columnsList = [];
+      let firstColumnNameSelected = "";
+      let secondColumnNameSelected = "State";
+      let showed = false;
+      let parsedData = null;
+     
+
+      document.getElementById('convertButton').addEventListener('click', () => {
+        convertCSV();
+      });
+
+      function convertCSV() {
+
+        // clear the container
+        document.getElementById('map').innerHTML = "";
+        const fileInput = document.getElementById('csvFileInput');
+        const outputElement = document.getElementById('output');
+        const file = fileInput.files[0];
+
+        if (file) {
+          const reader = new FileReader();
+
+          reader.onload = function (event) {
+            const csvData = event.target.result;
+            if (firstColumnNameSelected == "" || secondColumnNameSelected == "") addColumnList(csvData);
+            parsedData = parseCSV(csvData);
+            console.log("Data parsed");
+            if (firstColumnNameSelected != "" && secondColumnNameSelected != "") {
+              data = buildHierarchy(parsedData); // Assign the data
+              // console.log(parsedData);
+              loadTree(data);
+              outputElement.textContent = JSON.stringify(data, null, 2);
+            } else {
+              outputElement.textContent = "Please select a column name.";
+            }
+          };
+
+          reader.readAsText(file);
+        } else {
+          outputElement.textContent = "Please select a CSV file.";
+        }
+      }
+
+      function wrapper(check = false) {
+        
+
+        let selectBtn = document.createElement('select');
+        selectBtn.setAttribute('id', 'selectBtn');
+        selectBtn.setAttribute('class', 'button button1');
+        selectBtn.setAttribute('style', 'margin-left: 16px; margin-right: 16px;');
+        document.getElementById('container').appendChild(selectBtn);
+
+        let option = document.createElement('option');
+        option.setAttribute('value', '-select-column-name-');
+        option.setAttribute('value', '-select-column-name-');
+        option.innerHTML = "-select-column-name-";
+        option.disabled = true;
+        option.selected = true;
+        selectBtn.appendChild(option);
+
+        // console.log(columnsList);
+
+        for (let i = 1; i < columnsList.length; i++) {
+          if(columnsList[i]!='State'){
+
+            let option = document.createElement('option');
+            option.setAttribute('value', columnsList[i]);
+            option.innerHTML = columnsList[i];
+            selectBtn.appendChild(option);
+          }
+        }
+        return selectBtn;
+      }
+
+      function addColumnList(csvData) {
+
+        columnsList = csvData.split('\n')[0].split(',').map(column => column.trim());
+
+        let clmBtnList = []
+
+
+        if (showed == false) clmBtnList.push(wrapper());
+        // if (showed == false) clmBtnList.push(wrapper());
+        // if (showed == false) clmBtnList.push(wrapper(check = true));
+        showed = true;
+
+        // console.log(clmBtnList);
+
+        clmBtnList[0].addEventListener('change', () => {
+          firstColumnNameSelected = clmBtnList[0].value;
+          convertCSV();
+          // console.log(firstColumnNameSelected);
+        });
+
+        // clmBtnList[1].addEventListener('change', () => {
+        //   secondColumnNameSelected = clmBtnList[1].value;
+        //   convertCSV();
+        //   // console.log(secondColumnNameSelected);
+        // });
+
+        // // see if the checkbox is checked or not
+        // clmBtnList[2].addEventListener('change', () => {
+        //   valIsInt = clmBtnList[2].checked;
+        //   convertCSV();
+        // })
+      }
+
+      function parseCSV(csv) {
+        const lines = csv.split('\n');
+        const data = [];
+        const header = lines[0].split(',').map(column => column.trim());
+        // const cityColumnIndex = header.indexOf(firstColumnNameSelected);
+        // const stateColumnIndex = header.indexOf(secondColumnNameSelected);
+        const cityColumnIndex = header.indexOf(firstColumnNameSelected);
+        const stateColumnIndex = header.indexOf(secondColumnNameSelected);
+
+        if (cityColumnIndex === -1 || stateColumnIndex === -1) {
+          return data;
+        }
+
+        for (let i = 1; i < lines.length; i++) {
+          const values = lines[i].split(',').map(value => value.trim());
+          const city = values[cityColumnIndex];
+          const state = values[stateColumnIndex];
+
+          if (city && state) {
+            data.push({ state, city });
+          }
+        }
+
+        return data;
+      }
+
+      function buildHierarchy(parsedData) {
+
+        const hierarchy = [{ name: "USA", children: [] }];
+
+
+        parsedData.forEach(item => {
+          const { state, city } = item;
+
+          // Find the state node or create it if it doesn't exist
+          let stateNode = hierarchy[0].children.find(node => node.name === stateCodeToName(state));
+          // console.log(stateNode);
+
+          if (!stateNode) {
+            // check if the value of city is int or string
+            
+              stateNode = { name: stateCodeToName(state), children:[] };
+            
+            hierarchy[0].children.push(stateNode);
+          }
+
+          // // Find the city node within the state's children or create it if it doesn't exist
+
+          
+            // console.log("string");
+            let cityNode = stateNode.children.find(node => node.name === city);
+
+            // if (stateNode.children == undefined) {
+            //   stateNode.children = [];
+            // }
+
+            // cityNode = stateNode.children.find(node => node.name === city);
+
+            if (cityNode) {
+              cityNode.value++;
+            } else {
+              stateNode.children.push({ name: city, value: 1 });
+            }
+          
+
+        });
+
+        return hierarchy; // Return the hierarchical structure
+      }
+
+      function stateCodeToName(stateCode) {
+        const stateMapping = {
+          AL: 'Alabama',
+          AK: 'Alaska',
+          AZ: 'Arizona',
+          AR: 'Arkansas',
+          CA: 'California',
+          CO: 'Colorado',
+          CT: 'Connecticut',
+          DE: 'Delaware',
+          FL: 'Florida',
+          GA: 'Georgia',
+          HI: 'Hawaii',
+          ID: 'Idaho',
+          IL: 'Illinois',
+          IN: 'Indiana',
+          IA: 'Iowa',
+          KS: 'Kansas',
+          KY: 'Kentucky',
+          LA: 'Louisiana',
+          ME: 'Maine',
+          MD: 'Maryland',
+          MA: 'Massachusetts',
+          MI: 'Michigan',
+          MN: 'Minnesota',
+          MS: 'Mississippi',
+          MO: 'Missouri',
+          MT: 'Montana',
+          NE: 'Nebraska',
+          NV: 'Nevada',
+          NH: 'New Hampshire',
+          NJ: 'New Jersey',
+          NM: 'New Mexico',
+          NY: 'New York',
+          NC: 'North Carolina',
+          ND: 'North Dakota',
+          OH: 'Ohio',
+          OK: 'Oklahoma',
+          OR: 'Oregon',
+          PA: 'Pennsylvania',
+          RI: 'Rhode Island',
+          SC: 'South Carolina',
+          SD: 'South Dakota',
+          TN: 'Tennessee',
+          TX: 'Texas',
+          UT: 'Utah',
+          VT: 'Vermont',
+          VA: 'Virginia',
+          WA: 'Washington',
+          WV: 'West Virginia',
+          WI: 'Wisconsin',
+          WY: 'Wyoming'
+        };
+
+        // Convert the state code to its full name, or return undefined if not found
+        return stateMapping[stateCode] || 'State Not Provided';
+      }
+
+
+      function loadTree(data) {
+
+        // create a data tree
+        var treeData = anychart.data.tree(data, "as-tree");
+
+        // create a treemap chart visualizing the data tree
+        var chart = anychart.treeMap(treeData);
+
+        // set the depth of hints
+        chart.hintDepth(1);
+        // set the opacity of hints
+        chart.hintOpacity(0.7);
+
+        // configure the visual settings of the chart
+        chart.hovered().fill("silver", 0.2);
+        chart.selected().fill("silver", 0.6);
+        chart.selected().hatchFill("backward-diagonal", "silver", 2, 20);
+        chart.normal().stroke("silver");
+        chart.hovered().stroke("black", 2);
+        chart.selected().stroke("black", 2);
+
+        // create and configure a custom color scale
+        var customColorScale = anychart.scales.linearColor();
+        customColorScale.colors(["Orange", "Purple", "MediumPurple", "Red"]);
+        // apply the custom color scale to the treemap chart
+        chart.colorScale(customColorScale);
+        // add the color range
+        chart.colorRange().enabled(true);
+        chart.colorRange().length("90%");
+
+        // enable HTML in the chart title
+        chart.title().useHtml(true);
+        // configure the chart title
+        chart.title(
+          "<span style='font-size:18; font-style:bold'>Alternate Fueling Stations Data Across the USA</span><br><i><span style='font-size:14; font-style:italic'>State being first level of hierarchy</i>"
+        );
+
+        // enable HTML in the chart tooltips
+        chart.tooltip().useHtml(true);
+        // configure the chart tooltips
+        chart.tooltip().format(
+          "Value: {%value} <br><i></i>"
+        );
+
+        // enable HTML in the chart labels
+        chart.labels().useHtml(true);
+        // configure the chart labels
+        chart.labels().format(
+          "<span style='font-weight:bold'>{%name}</span><br>{%value}"
+        );
+
+        // set the container id
+        chart.container("map");
+
+        // draw the chart
+        chart.draw();
+      }
+
+    });</script>
+</body>
+
+</html>

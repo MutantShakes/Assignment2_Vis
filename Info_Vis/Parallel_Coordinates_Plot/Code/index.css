@@ -1,0 +1,93 @@
+/* Add your CSS styles here */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    /* height: 40px; */
+    background-color: #FFFF99;
+    /* color: #fff; */
+    text-align: center;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 20px;
+    padding: 0;
+}
+
+nav li {
+    display: inline;
+    margin-right: 20px;
+    justify-content: space-between;
+}
+
+nav a {
+    text-decoration: none;
+    margin: 5px 2px;
+    padding: 5px 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #FFFFCC;
+    color: black;
+}
+
+main {
+    margin: 20px;
+}
+
+section {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+footer {
+    background-color: #FFFF99;
+    /* color: #fff; */
+    text-align: center;
+    padding: 10px 0;
+    /* height: 30px; */
+}
+
+/* CSS to style the floating image and paragraph */
+.container {
+    width: 100%;
+    /* height: 300px; */
+    height: auto;
+    overflow: hidden;
+}
+
+.float-left {
+    float: left;
+    margin: 10px;
+}
+
+.float-right {
+    float: right;
+    margin: 10px;
+}
+
+/* Adjust these styles as needed */
+img {
+    width: 500px;
+    height: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.container > p {
+    padding: 10px 40px;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: center;
+    /* width: 100px; */
+}
+
+.container > h2{
+    text-align: center;
+}

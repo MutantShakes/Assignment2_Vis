@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index1.css">
+
+	<!-- Load plotly.js into the DOM -->
+	<script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+
+    <script src="./index1.js"></script>
+</head>
+<body>
+    <div id="pcp">
+        <!-- <h1>My plot</h1> -->
+        <div id="title">
+            <h1>Parallel Coordinate Plot (PCP)</h1>
+            <h2>Alternative Fueling Stations Information</h2>
+            <ol>
+                <h4># Dimensions of Parallel Coordinate Plot :</h4>
+                <li>Fuel Type Code</li>
+                <li>Owner Type Code</li>
+                <li>Access Code</li>
+                <li>Facility Type : 1- Stand Alone, 2- Municipal Govern., 3- Utility, 4- Airport, 5- School, 6- State govern., 7- Car Dealer, 8- Convenience store, 9- Fuel reseller, 10- Fire station, 11- Others.
+                </li>
+                <li>Latitude</li>
+                <li>Longitude</li>
+            </ol>
+            <a href="index.html">Go back to Home Page</a>
+        </div>
+        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+    </div>
+</body>
+</html>

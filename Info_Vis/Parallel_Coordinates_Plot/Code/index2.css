@@ -1,0 +1,78 @@
+#myDiv {
+    /* background-color: lightyellow; */
+    /* display: flex;
+    align-items: center;
+    align-content: center;
+    align-content: center; */
+    margin: 10px 10px;
+    padding: 40px 40px;
+    border: 2px solid black;
+    border-radius: 20px;
+    background-color: #FFFFCC;
+}
+
+#pcp {
+    background-color: lightyellow;
+    display: flex;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    align-content: center;
+}
+
+body {
+    background-color: lightyellow;
+    margin: 0;
+}
+
+#title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    padding: 0px 10px;
+}
+
+#title > h1{
+    background-color: #FFFF66;
+    margin: 5px 5px;
+    padding: 5px 10px;
+    border: 2px solid black;
+    border-radius: 20px;
+    text-align: center;
+}
+
+#title > h2{
+    background-color: #FFFF99;
+    margin: 5px 20px;
+    padding: 5px 5px;
+    border: 2px solid black;
+    border-radius: 20px;
+    text-align: center;
+}
+
+#title > ol{
+    background-color: #FFFFCC;
+    /* margin: 20px 20px; */
+    padding: 5px 5px;
+    padding-left: 30px;
+    border: 2px solid black;
+    border-radius: 20px;
+    /* text-align: center; */
+}
+
+#title > ol > h4 {
+    padding: 0px;
+    margin: 10px 4px;
+}
+
+#title > a {
+    text-decoration: none;
+    margin: 5px 5px;
+    padding: 5px 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #FFFFCC;
+    color: black;
+}
