@@ -44,4 +44,4 @@ You can customize the appearance and behavior of the Treemap chart by modifying 
 
 ## Dependencies
 - AnyChart Library (version 8.10.0): Included in the project for Treemap chart functionality.
-```
+
